@@ -1,8 +1,10 @@
 import { Action, configureStore, ThunkAction } from "@reduxjs/toolkit";
 import uiReducer from "./uiSlice";
+import gridReducer from "./gridSlice";
 export const store = configureStore({
   reducer: {
     ui: uiReducer,
+    grid: gridReducer,
   },
 });
 

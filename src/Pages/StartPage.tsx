@@ -3,9 +3,16 @@ import { Flex } from "@mantine/core";
 import DataSourceButton from "../Components/DataSourceButton";
 import FileUploadButton from "../Components/FileUploadButton";
 import { useMediaQuery } from "@mantine/hooks";
+import { useAppDispatch } from "../store/hooks";
+import { setGridData } from "../store/gridSlice";
 
 const StartPage = () => {
-  const onDemoClick = useCallback(() => {}, []);
+  const dispatch = useAppDispatch();
+
+  const onDemoClick = useCallback(() => {
+    dispatch(setGridData());
+  }, [dispatch]);
+
   const onNewFile = useCallback(() => {}, []);
   const matches = useMediaQuery("(min-width: 768px)");
 

@@ -1,6 +1,8 @@
 import React, { ChangeEvent, useCallback, useRef } from "react";
 import { Button } from "@mantine/core";
 import DataSourceButton from "./DataSourceButton";
+import { useAppDispatch } from "../store/hooks";
+import { setGridData } from "../store/gridSlice";
 
 interface FileUploadButtonProps {
   label?: string;
@@ -8,9 +10,11 @@ interface FileUploadButtonProps {
 
 const FileUploadButton = ({ label }: FileUploadButtonProps) => {
   const hiddenFileInput = useRef<HTMLInputElement>(null);
+  const dispatch = useAppDispatch();
 
   const handleChange = (evt: ChangeEvent<HTMLInputElement>) => {
     if (!evt.target.files) return;
+    dispatch(setGridData(evt.target.files[0]));
   };
 
   const handleClick = useCallback(() => {
