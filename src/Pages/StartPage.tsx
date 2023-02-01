@@ -5,11 +5,13 @@ import FileUploadButton from "../Components/FileUploadButton";
 import { useMediaQuery } from "@mantine/hooks";
 import { useAppDispatch } from "../store/hooks";
 import { setGridData } from "../store/gridSlice";
+import { openModal } from "../store/uiSlice";
 
 const StartPage = () => {
   const dispatch = useAppDispatch();
 
   const onDemoClick = useCallback(() => {
+    dispatch(openModal({ name: "importConfirmation" }));
     dispatch(setGridData());
   }, [dispatch]);
 

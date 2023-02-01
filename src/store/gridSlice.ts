@@ -6,6 +6,7 @@ import {
 import { RootState } from "./store";
 import { parseCsv } from "../helpers/parseCsv";
 import { GridState, RowData } from "../types";
+import { formatFileSize } from "../helpers/formatFileSize";
 
 export const setGridData = createAsyncThunk(
   "grid/setGridData",
@@ -22,7 +23,14 @@ export const setGridData = createAsyncThunk(
       ...row,
       __id: i,
     }));
-    return { data, headers, columns };
+
+    return {
+      filename: file?.name || "",
+      fileSize: formatFileSize(file?.size!),
+      data,
+      headers,
+      columns,
+    };
   }
 );
 
@@ -33,6 +41,8 @@ const rowsAdapter = createEntityAdapter<RowData>({
 const gridSlice = createSlice({
   name: "grid",
   initialState: rowsAdapter.getInitialState<GridState>({
+    filename: "",
+    fileSize: "",
     columns: [],
     headers: [],
     loading: false,
@@ -43,10 +53,10 @@ const gridSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(setGridData.fulfilled, (state, action) => {
+      const { data, ...rest } = action.payload;
       state.loading = false;
-      state.headers = action.payload.headers;
-      state.columns = action.payload.columns;
-      rowsAdapter.setAll(state, action.payload.data);
+      Object.assign(state, rest);
+      rowsAdapter.setAll(state, data);
     });
     builder.addCase(setGridData.rejected, (state) => {
       state.loading = false;
@@ -59,7 +69,14 @@ export const {} = gridSlice.actions;
 const rowsSelectors = rowsAdapter.getSelectors(
   (state: RootState) => state.grid
 );
-export const { selectAll: selectAllRows, selectEntities: selectRows } =
-  rowsSelectors;
-
+export const {
+  selectAll: selectAllRows,
+  selectEntities: selectRows,
+  selectTotal: selectRowsTotal,
+} = rowsSelectors;
+export const selectColumns = (state: RootState) => state.grid.columns;
+export const selectFileInfo = (state: RootState) => ({
+  name: state.grid.filename,
+  size: state.grid.fileSize,
+});
 export default gridSlice.reducer;

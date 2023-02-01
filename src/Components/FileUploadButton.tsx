@@ -3,6 +3,7 @@ import { Button } from "@mantine/core";
 import DataSourceButton from "./DataSourceButton";
 import { useAppDispatch } from "../store/hooks";
 import { setGridData } from "../store/gridSlice";
+import { openModal } from "../store/uiSlice";
 
 interface FileUploadButtonProps {
   label?: string;
@@ -15,6 +16,7 @@ const FileUploadButton = ({ label }: FileUploadButtonProps) => {
   const handleChange = (evt: ChangeEvent<HTMLInputElement>) => {
     if (!evt.target.files) return;
     dispatch(setGridData(evt.target.files[0]));
+    dispatch(openModal({ name: "importConfirmation" }));
   };
 
   const handleClick = useCallback(() => {

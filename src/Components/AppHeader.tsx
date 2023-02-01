@@ -1,5 +1,6 @@
 import React, { useCallback } from "react";
 import {
+  Anchor,
   Container,
   Group,
   Header,
@@ -7,12 +8,15 @@ import {
   Title,
   useMantineTheme,
 } from "@mantine/core";
+import { Link as RouterLink } from "react-router-dom";
 import { BsMoonFill, BsSun } from "react-icons/bs";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { selectColorScheme, toggleColorScheme } from "../store/uiSlice";
+import { selectFileInfo } from "../store/gridSlice";
 
 const AppHeader = () => {
   const colorScheme = useAppSelector(selectColorScheme);
+  const { name } = useAppSelector(selectFileInfo);
   const dispatch = useAppDispatch();
 
   const toggle = useCallback(() => {
@@ -24,9 +28,12 @@ const AppHeader = () => {
     <Header height={56}>
       <Container fluid>
         <Group spacing={5} h={56} position="apart">
-          <Title c="green" fw="bolder" size="h1">
-            CSV Viewer
-          </Title>
+          <Anchor variant="text" to="/" component={RouterLink}>
+            <Title c="green" fw="bolder" size="h1">
+              CSV Viewer
+            </Title>
+          </Anchor>
+          {name && <Title>{name}</Title>}
           <Group>
             <Switch
               checked={colorScheme === "dark"}
