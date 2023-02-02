@@ -45,9 +45,20 @@ const gridSlice = createSlice({
     fileSize: "",
     columns: [],
     headers: [],
+    selectedRows: [],
     loading: false,
   }),
-  reducers: {},
+  reducers: {
+    updateSelectedRows: (state, action) => {
+      state.selectedRows = action.payload;
+    },
+    updateRow: (state, action) => {
+      rowsAdapter.setOne(state, action.payload);
+    },
+    removeRows: (state, action) => {
+      rowsAdapter.removeMany(state, action.payload);
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(setGridData.pending, (state) => {
       state.loading = true;
@@ -64,17 +75,15 @@ const gridSlice = createSlice({
   },
 });
 
-export const {} = gridSlice.actions;
+export const { updateSelectedRows, updateRow, removeRows } = gridSlice.actions;
 
 const rowsSelectors = rowsAdapter.getSelectors(
   (state: RootState) => state.grid
 );
-export const {
-  selectAll: selectAllRows,
-  selectEntities: selectRows,
-  selectTotal: selectRowsTotal,
-} = rowsSelectors;
+export const { selectAll: selectAllRows, selectTotal: selectRowsTotal } =
+  rowsSelectors;
 export const selectColumns = (state: RootState) => state.grid.columns;
+export const selectSelectedRows = (state: RootState) => state.grid.selectedRows;
 export const selectFileInfo = (state: RootState) => ({
   name: state.grid.filename,
   size: state.grid.fileSize,

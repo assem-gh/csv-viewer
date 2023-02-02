@@ -5,12 +5,17 @@ import { selectColorScheme } from "./store/uiSlice";
 import StartPage from "./Pages/StartPage";
 import AppModal from "./Components/modals/AppModal";
 import { Route, Routes } from "react-router-dom";
-import DataGrid from "./Components/DataGrid";
+import DataGrid from "./Components/DataGrid/DataGrid";
 
 function App() {
   const colorScheme = useAppSelector(selectColorScheme);
   return (
-    <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
+    <MantineProvider
+      withCSSVariables
+      theme={{ colorScheme }}
+      withGlobalStyles
+      withNormalizeCSS
+    >
       <AppModal />
       <AppHeader />
       <Routes>

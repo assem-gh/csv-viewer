@@ -33,7 +33,7 @@ const AppHeader = () => {
               CSV Viewer
             </Title>
           </Anchor>
-          {name && <Title>{name}</Title>}
+          {name && <Title size="h3">{name}</Title>}
           <Group>
             <Switch
               checked={colorScheme === "dark"}

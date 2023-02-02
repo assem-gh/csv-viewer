@@ -11,6 +11,7 @@ export interface GridState {
   columns: ColDef[];
   headers: string[];
   loading: boolean;
+  selectedRows: number[];
 }
 
 export type ModalName = keyof typeof modalComponentsLookup;

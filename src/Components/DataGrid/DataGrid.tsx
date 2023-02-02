@@ -1,16 +1,27 @@
 import React, { useCallback, useMemo, useRef } from "react";
 import { AgGridReact } from "ag-grid-react";
-import { ColDef, GetRowIdParams } from "ag-grid-community";
+import { ColDef, GetRowIdParams, ValueSetterParams } from "ag-grid-community";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import { Box } from "@mantine/core";
-import { useAppSelector } from "../store/hooks";
-import { selectAllRows, selectColumns } from "../store/gridSlice";
-import { selectColorScheme } from "../store/uiSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import {
+  selectAllRows,
+  selectColumns,
+  updateRow,
+  updateSelectedRows,
+} from "../../store/gridSlice";
+import { selectColorScheme } from "../../store/uiSlice";
+import DataGridToolbar from "./DataGridToolbar";
+import { useNavigate } from "react-router-dom";
 
 const DataGrid = () => {
   const data = useAppSelector(selectAllRows);
   const columns = useAppSelector(selectColumns);
+  const gridRef = useRef<AgGridReact>(null);
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const getRowId = useCallback((params: GetRowIdParams) => {
     return params.data.__id;
@@ -20,7 +31,13 @@ const DataGrid = () => {
   const gridTheme =
     colorScheme === "light" ? "ag-theme-alpine" : "ag-theme-alpine-dark";
 
-  const gridRef = useRef<AgGridReact>(null);
+  const saveNewValue = (params: ValueSetterParams) => {
+    let field = params.column.getColId();
+    let newRow = { ...params.data };
+    newRow[field] = params.newValue;
+    dispatch(updateRow(newRow));
+    return false;
+  };
 
   const defaultColDef = useMemo<ColDef>(
     () => ({
@@ -29,9 +46,21 @@ const DataGrid = () => {
       editable: true,
       flex: 1,
       resizable: true,
+      valueSetter: saveNewValue,
     }),
     []
   );
+  const onSelectionChanged = useCallback(() => {
+    dispatch(
+      updateSelectedRows(
+        gridRef.current!.api.getSelectedRows().map((row) => row.__id)
+      )
+    );
+  }, []);
+
+  const onGridReady = () => {
+    if (columns.length < 1) navigate("/");
+  };
 
   return (
     <div>
@@ -41,6 +70,7 @@ const DataGrid = () => {
         pt="md"
         style={{ width: "100%", height: "calc(100vh - 124px)" }}
       >
+        <DataGridToolbar gridRef={gridRef} />
         <AgGridReact
           ref={gridRef}
           pagination={true}
@@ -52,6 +82,8 @@ const DataGrid = () => {
           paginationPageSize={20}
           getRowId={getRowId}
           suppressAutoSize={true}
+          onSelectionChanged={onSelectionChanged}
+          onGridReady={onGridReady}
         />
       </Box>
     </div>

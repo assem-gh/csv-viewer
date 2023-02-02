@@ -1,12 +1,12 @@
 import React from "react";
 import {
   Box,
+  createStyles,
   Paper,
   Stack,
+  Text,
   Title,
   UnstyledButton,
-  Text,
-  createStyles,
 } from "@mantine/core";
 
 interface DataSourceButtonProps {
@@ -15,6 +15,7 @@ interface DataSourceButtonProps {
   imageSrc: string;
   onClick: () => void;
 }
+
 const DataSourceButton = ({
   onClick,
   title,
