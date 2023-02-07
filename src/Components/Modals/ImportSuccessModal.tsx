@@ -1,6 +1,7 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import {
   Button,
+  Chip,
   Flex,
   Group,
   List,
@@ -12,7 +13,11 @@ import {
 } from "@mantine/core";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { closeModal } from "../../store/uiSlice";
-import { selectFileInfo, selectRowsTotal } from "../../store/gridSlice";
+import {
+  selectColumnNames,
+  selectFileInfo,
+  selectRowsTotal,
+} from "../../store/gridSlice";
 import { BsCheck, BsCheckCircle } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 
@@ -22,6 +27,7 @@ const ImportSuccessModal = () => {
   const { name, size } = useAppSelector(selectFileInfo);
   const loading = useAppSelector((state) => state.grid.loading);
   const total = useAppSelector(selectRowsTotal);
+  const headers = useAppSelector(selectColumnNames);
 
   const onViewData = useCallback(() => {
     navigate("/d/" + name.slice(0, name.lastIndexOf(".")));
@@ -31,6 +37,25 @@ const ImportSuccessModal = () => {
   const onCancel = useCallback(() => {
     dispatch(closeModal());
   }, [dispatch]);
+
+  const cols = useMemo(() => {
+    return (
+      <Chip.Group position="left" align="center" mt="sm" multiple>
+        {headers.map((h) => (
+          <Chip
+            defaultChecked
+            color="teal"
+            key={h}
+            variant="filled"
+            value={h}
+            size="sm"
+          >
+            {h}
+          </Chip>
+        ))}
+      </Chip.Group>
+    );
+  }, [headers]);
 
   return (
     <Paper mih="xl">
@@ -55,6 +80,11 @@ const ImportSuccessModal = () => {
             </List.Item>
             <List.Item>
               <Text>Rows: {total}.</Text>
+            </List.Item>
+            <List.Item>
+              <Text>Columns: {headers.length}:</Text>
+
+              {cols}
             </List.Item>
           </List>
           <Group mt="md" mb="xs" w="100%" position="center" grow>

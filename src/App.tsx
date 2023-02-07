@@ -3,9 +3,10 @@ import { useAppSelector } from "./store/hooks";
 import AppHeader from "./Components/AppHeader";
 import { selectColorScheme } from "./store/uiSlice";
 import StartPage from "./Pages/StartPage";
-import AppModal from "./Components/modals/AppModal";
+import AppModal from "./Components/Modals/AppModal";
 import { Route, Routes } from "react-router-dom";
-import DataGrid from "./Components/DataGrid/DataGrid";
+import DataGridPage from "./Pages/DataGridPage";
+import AppDrawer from "./Components/Drawers/AppDrawer";
 
 function App() {
   const colorScheme = useAppSelector(selectColorScheme);
@@ -16,11 +17,12 @@ function App() {
       withGlobalStyles
       withNormalizeCSS
     >
+      <AppDrawer />
       <AppModal />
       <AppHeader />
       <Routes>
         <Route path="/" element={<StartPage />} />
-        <Route path="/d/:name" element={<DataGrid />} />
+        <Route path="/d/:name" element={<DataGridPage />} />
       </Routes>
     </MantineProvider>
   );

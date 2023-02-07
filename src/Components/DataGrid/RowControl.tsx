@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { removeRows, selectSelectedRows } from "../../store/gridSlice";
 
 interface RowControlProps {
-  onAddRow: () => () => void;
+  onAddRow: (pos: number) => () => void;
   onUnselectRows: () => void;
 }
 
@@ -20,7 +20,7 @@ const RowControl = ({ onAddRow, onUnselectRows }: RowControlProps) => {
 
   const onDeleteRows = useCallback(() => {
     dispatch(removeRows(selectedRows));
-  }, [selectedRows]);
+  }, [dispatch, selectedRows]);
 
   return (
     <Group align="center" h="100%" spacing={0} pl={12}>
@@ -31,12 +31,12 @@ const RowControl = ({ onAddRow, onUnselectRows }: RowControlProps) => {
       </Tooltip>
 
       <Tooltip label="Insert Above">
-        <ActionIcon h={40} w={40} onClick={onAddRow()}>
+        <ActionIcon h={40} w={40} onClick={onAddRow(1)}>
           <BsArrowBarUp size={18} />
         </ActionIcon>
       </Tooltip>
       <Tooltip label="Insert Below">
-        <ActionIcon w={40} h={40} onClick={onAddRow()}>
+        <ActionIcon w={40} h={40} onClick={onAddRow(-1)}>
           <BsArrowBarDown size={18} />
         </ActionIcon>
       </Tooltip>

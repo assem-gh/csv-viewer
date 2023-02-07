@@ -14,6 +14,7 @@ export const parseCsv = (file: File | undefined): Promise<ParseResult<any>> => {
       header: true,
       skipEmptyLines: true,
       preview: 10000,
+      dynamicTyping: true,
       complete: onComplete,
       error: onError,
     };

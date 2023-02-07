@@ -1,11 +1,12 @@
 import React, { memo, RefObject, useCallback } from "react";
 import { Divider, Flex } from "@mantine/core";
 import { AgGridReact } from "ag-grid-react";
-import { useAppSelector } from "../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import RowControl from "./RowControl";
 import PaginationControl from "./PaginationControl";
 import DataGridActions from "./DataGridActions";
 import { selectSelectedRows } from "../../store/gridSlice";
+import { openDrawer } from "../../store/uiSlice";
 
 interface DataGridToolbarProps {
   gridRef: RefObject<AgGridReact>;
@@ -13,7 +14,7 @@ interface DataGridToolbarProps {
 
 const DataGridToolbar = memo(({ gridRef }: DataGridToolbarProps) => {
   const selectedRows = useAppSelector(selectSelectedRows) || 0;
-
+  const dispatch = useAppDispatch();
   const onFileDownload = useCallback(() => {
     const exportConfig = { onlySelected: selectedRows.length > 0 };
     gridRef.current!.api.exportDataAsCsv(exportConfig);
@@ -23,7 +24,18 @@ const DataGridToolbar = memo(({ gridRef }: DataGridToolbarProps) => {
     gridRef.current?.api.deselectAll();
   }, []);
 
-  const onAddRow = useCallback(() => () => {}, []);
+  const onAddRow = useCallback(
+    (pos: number) => () => {
+      dispatch(
+        openDrawer({
+          name: "addRow",
+          props: { title: "Add new Row" },
+          payload: { pos },
+        })
+      );
+    },
+    []
+  );
 
   const setPageSize = useCallback((size: number) => {
     gridRef.current!.api.paginationSetPageSize(size);

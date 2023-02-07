@@ -4,20 +4,21 @@ import { ColDef, GetRowIdParams, ValueSetterParams } from "ag-grid-community";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import { Box } from "@mantine/core";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 import {
   selectAllRows,
-  selectColumns,
+  selectColumnNames,
   updateRow,
   updateSelectedRows,
-} from "../../store/gridSlice";
-import { selectColorScheme } from "../../store/uiSlice";
-import DataGridToolbar from "./DataGridToolbar";
+} from "../store/gridSlice";
+import { selectColorScheme } from "../store/uiSlice";
+import DataGridToolbar from "../Components/DataGrid/DataGridToolbar";
 import { useNavigate } from "react-router-dom";
 
-const DataGrid = () => {
+const DataGridPage = () => {
   const data = useAppSelector(selectAllRows);
-  const columns = useAppSelector(selectColumns);
+  const columnNames = useAppSelector(selectColumnNames);
+
   const gridRef = useRef<AgGridReact>(null);
 
   const dispatch = useAppDispatch();
@@ -39,6 +40,17 @@ const DataGrid = () => {
     return false;
   };
 
+  const columnDefs: ColDef[] = useMemo(
+    () =>
+      columnNames.map((name, i) => ({
+        field: name,
+        hide: name === "__id",
+        headerCheckboxSelection: i === 0,
+        checkboxSelection: i === 0,
+      })),
+    [columnNames]
+  );
+
   const defaultColDef = useMemo<ColDef>(
     () => ({
       sortable: true,
@@ -56,10 +68,10 @@ const DataGrid = () => {
         gridRef.current!.api.getSelectedRows().map((row) => row.__id)
       )
     );
-  }, []);
+  }, [dispatch]);
 
   const onGridReady = () => {
-    if (columns.length < 1) navigate("/");
+    if (columnNames.length < 1) navigate("/");
   };
 
   return (
@@ -68,14 +80,14 @@ const DataGrid = () => {
         className={gridTheme}
         px="md"
         pt="md"
-        style={{ width: "100%", height: "calc(100vh - 124px)" }}
+        sx={{ width: "100%", height: "calc(100vh - 124px)" }}
       >
         <DataGridToolbar gridRef={gridRef} />
         <AgGridReact
           ref={gridRef}
           pagination={true}
           rowData={data}
-          columnDefs={columns}
+          columnDefs={columnDefs}
           defaultColDef={defaultColDef}
           rowSelection="multiple"
           suppressRowClickSelection={true}
@@ -90,4 +102,4 @@ const DataGrid = () => {
   );
 };
 
-export default DataGrid;
+export default DataGridPage;
