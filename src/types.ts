@@ -48,3 +48,10 @@ export interface DrawerProps {
   size?: string | number;
   title?: string;
 }
+export interface ChartFormDataType {
+  category: string;
+  value: string;
+  calculation: CalculationType;
+  percentage: boolean;
+}
+export type CalculationType = "sum" | "count";

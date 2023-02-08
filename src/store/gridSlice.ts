@@ -22,10 +22,9 @@ export const setGridData = createAsyncThunk(
     }));
 
     const columns = getDataFormat(data, headers);
-
     return {
-      filename: file?.name || "",
-      fileSize: formatFileSize(file?.size!),
+      filename: file?.name || "Artikel.csv",
+      fileSize: formatFileSize(file?.size || 1801666),
       data,
       columns,
     };

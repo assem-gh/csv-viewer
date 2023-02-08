@@ -617,6 +617,18 @@
     magic-string "^0.26.7"
     react-refresh "^0.14.0"
 
+ag-charts-community@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/ag-charts-community/-/ag-charts-community-7.0.0.tgz#0fdedba5566be115d3e836e768902befe61a51a1"
+  integrity sha512-4GPy0hj1839ffKHL/02+RLsNx1KKFwJjufqGBUVwA+5kRHU0MUQoA4Zn18h/w3zelE4iyzLtvN8+EEU66Ns9Hg==
+
+ag-charts-react@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/ag-charts-react/-/ag-charts-react-7.0.0.tgz#9f46cc04ff9a8282fdd2e759f411e5bc9a955344"
+  integrity sha512-jvV5SVvkWa0zA+4HLCI4pEGfV2Xj7Dp0xmNwOJlXfs6FlTgZFSJIBoSbPFtIpopWBz3+NK7Kh+mjJ0sXJEehyw==
+  dependencies:
+    prop-types "^15.6.2"
+
 ag-grid-community@^29.0.0:
   version "29.0.0"
   resolved "https://registry.yarnpkg.com/ag-grid-community/-/ag-grid-community-29.0.0.tgz#33c8de7b253af15986c343f6d6fd098f3e6d681b"
@@ -1067,7 +1079,7 @@ postcss@^8.4.18:
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
 
-prop-types@^15.8.1:
+prop-types@^15.6.2, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
